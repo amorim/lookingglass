@@ -89,7 +89,7 @@ if (LG_BLOCK_CUSTOM) {
 
 <div class="col-lg-10 mx-auto p-3 py-md-5" style="max-width: 1500px;">
 
-    <form method="POST" action="/lg" autocomplete="off">
+    <form method="POST" action="/lg/" autocomplete="off">
     <header class="row d-flex align-items-center pb-3 mb-5 border-bottom">
             <div class="col-12 col-md-8">
                 <p class="d-flex align-items-center text-dark text-decoration-none" >

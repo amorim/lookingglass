@@ -97,6 +97,7 @@ if (LG_BLOCK_CUSTOM) {
                 </p>
             </div>
             <div class="col-12 col-md-4 float-end">
+                <label>Selecione um provedor</label>
                 <select id="link" name="link" class="form-select">
                     <?php foreach ($links as $name => $value) { ?>
                         <option value="<?php echo $value; ?>"<?php if (isset($_SESSION['LINK']) && $_SESSION['LINK'] == $value) { echo 'selected'; } ?>><?php echo $name; ?></option>

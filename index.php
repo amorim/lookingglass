@@ -53,7 +53,7 @@ if (!empty($_POST)) {
                 if (!LookingGlass::isValidIpv4($_POST['targetHost'])) {
                     $targetHost = LookingGlass::isValidHost($_POST['targetHost'], 'ipv4');
                     if (!$targetHost) {
-                        $errorMessage = 'IPv4 inválido.';
+                        $errorMessage = 'Destino inválido.';
                         break;
                     }
                     $_SESSION['TARGET'] = $targetHost;
@@ -87,9 +87,9 @@ if (LG_BLOCK_CUSTOM) {
 </head>
 <body>
 
-<div class="col-lg-6 mx-auto p-3 py-md-5">
+<div class="col-lg-10 mx-auto p-3 py-md-5" style="max-width: 1500px;">
 
-    <form method="POST" action="/" autocomplete="off">
+    <form method="POST" action="/lg" autocomplete="off">
     <header class="row d-flex align-items-center pb-3 mb-5 border-bottom">
             <div class="col-12 col-md-8">
                 <p class="d-flex align-items-center text-dark text-decoration-none" >
@@ -145,7 +145,7 @@ if (LG_BLOCK_CUSTOM) {
                             <div class="col-md-7 mb-3">
                                 <div class="input-group">
                                     <span class="input-group-text" id="basic-addon1">Destino</span>
-                                    <input type="text" class="form-control" placeholder="IP address or host..." name="targetHost" value="<?php if (isset($_SESSION['TARGET'])) { echo $_SESSION['TARGET']; } ?>" required="">
+                                    <input type="text" class="form-control" placeholder="IP ou host..." name="targetHost" value="<?php if (isset($_SESSION['TARGET'])) { echo $_SESSION['TARGET']; } ?>" required="">
                                 </div>
                             </div>
                             <div class="col-md-5 mb-3">
@@ -170,7 +170,7 @@ if (LG_BLOCK_CUSTOM) {
                         <?php if (isset($errorMessage)) echo '<div class="alert alert-danger mt-3" role="alert">'.$errorMessage.'</div>'; ?>
 
                         <div class="card card-body bg-light mt-4" style="display: none;" id="outputCard">
-                            <pre id="outputContent" style="overflow: hidden; white-space: pre; word-wrap: normal;"></pre>
+                            <pre id="outputContent" style="overflow-x: scroll; white-space: pre; word-wrap: normal;"></pre>
                         </div>
 
                 </div>
@@ -191,14 +191,14 @@ if (LG_BLOCK_CUSTOM) {
     <?php if (isset($_SESSION['BACKEND'])) { echo 'callBackend();'; } ?>
     function callBackend() {
         const executeButton = document.getElementById('executeButton');
-        executeButton.innerText = 'Executing...';
+        executeButton.innerText = 'Aguarde...';
         executeButton.disabled = true;
         document.getElementById('outputCard').style.display = 'inherit';
         const xhr = new XMLHttpRequest();
         xhr.onreadystatechange = function () {
             document.getElementById('outputContent').innerHTML = this.responseText.replace(/<br \/> +/g, '<br />');
             if (this.readyState === XMLHttpRequest.DONE) {
-                executeButton.innerText = 'Execute';
+                executeButton.innerText = 'Executar';
                 executeButton.disabled = false;
                 console.log('Backend ready!');
             }

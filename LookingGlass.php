@@ -135,7 +135,7 @@ class LookingGlass
      */
     public static function ping(string $host, string $link, int $count = 4): bool
     {
-        return self::procExecute('ping -I ' . self::getLinkIp($link) . ' -c' . $count . ' -w15', $host);
+        return self::procExecute('ping -4 -I ' . self::getLinkIp($link) . ' -c' . $count . ' -w15', $host);
     }
 
     /**

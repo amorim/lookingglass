@@ -21,26 +21,26 @@ use Hybula\LookingGlass;
 LookingGlass::validateConfig();
 LookingGlass::startSession();
 
-if ($_SESSION['TARGET'] && $_SESSION['METHOD'] && isset($_SESSION['BACKEND'])) {
+if ($_SESSION['TARGET'] && $_SESSION['METHOD'] && isset($_SESSION['BACKEND']) && isset($_SESSION['LINK'])) {
     unset($_SESSION['BACKEND']);
     switch ($_SESSION['METHOD']) {
         case 'ping':
-            LookingGlass::ping($_SESSION['TARGET']);
+            LookingGlass::ping($_SESSION['TARGET'], $_SESSION['LINK']);
             break;
         case 'ping6':
-            LookingGlass::ping6($_SESSION['TARGET']);
+            LookingGlass::ping6($_SESSION['TARGET'], $_SESSION['LINK']);
             break;
         case 'mtr':
-            LookingGlass::mtr($_SESSION['TARGET']);
+            LookingGlass::mtr($_SESSION['TARGET'], $_SESSION['LINK']);
             break;
         case 'mtr6':
-            LookingGlass::mtr6($_SESSION['TARGET']);
+            LookingGlass::mtr6($_SESSION['TARGET'], $_SESSION['LINK']);
             break;
         case 'traceroute':
-            LookingGlass::traceroute($_SESSION['TARGET']);
+            LookingGlass::traceroute($_SESSION['TARGET'], $_SESSION['LINK']);
             break;
         case 'traceroute6':
-            LookingGlass::traceroute6($_SESSION['TARGET']);
+            LookingGlass::traceroute6($_SESSION['TARGET'], $_SESSION['LINK']);
             break;
     }
 }

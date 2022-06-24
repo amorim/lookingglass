@@ -20,6 +20,10 @@ class LookingGlass
     public static $targetHost;
     public static $targetType;
 
+    public static function getLinkIp(string $link): string {
+        return '192.168.1.4' . $link;
+    }
+
     /**
      * Validates the config.php file for required constants.
      *
@@ -29,27 +33,14 @@ class LookingGlass
     {
         if (!defined('LG_TITLE')) die('LG_TITLE not found in config.php');
         if (!defined('LG_LOGO')) die('LG_LOGO not found in config.php');
-        if (!defined('LG_LOGO_URL')) die('LG_LOGO_URL not found in config.php');
         if (!defined('LG_CSS_OVERRIDES')) die('LG_CSS_OVERRIDES not found in config.php');
         if (!defined('LG_BLOCK_NETWORK')) die('LG_BLOCK_NETWORK not found in config.php');
         if (!defined('LG_BLOCK_LOOKINGGLAS')) die('LG_BLOCK_LOOKINGGLAS not found in config.php');
-        if (!defined('LG_BLOCK_SPEEDTEST')) die('LG_BLOCK_SPEEDTEST not found in config.php');
         if (!defined('LG_BLOCK_CUSTOM')) die('LG_BLOCK_CUSTOM not found in config.php');
         if (!defined('LG_CUSTOM_HTML')) die('LG_CUSTOM_HTML not found in config.php');
         if (!defined('LG_CUSTOM_PHP')) die('LG_CUSTOM_PHP not found in config.php');
         if (!defined('LG_LOCATION')) die('LG_LOCATION not found in config.php');
-        if (!defined('LG_FACILITY')) die('LG_FACILITY not found in config.php');
-        if (!defined('LG_FACILITY_URL')) die('LG_FACILITY_URL not found in config.php');
-        if (!defined('LG_IPV4')) die('LG_IPV4 not found in config.php');
-        if (!defined('LG_IPV6')) die('LG_IPV6 not found in config.php');
         if (!defined('LG_METHODS')) die('LG_METHODS not found in config.php');
-        if (!defined('LG_LOCATIONS')) die('LG_LOCATIONSnot found in config.php');
-        if (!defined('LG_SPEEDTEST_IPERF')) die('LG_SPEEDTEST_IPERF not found in config.php');
-        if (!defined('LG_SPEEDTEST_LABEL_INCOMING')) die('LG_SPEEDTEST_LABEL_INCOMING not found in config.php');
-        if (!defined('LG_SPEEDTEST_CMD_INCOMING')) die('LG_SPEEDTEST_CMD_INCOMING not found in config.php');
-        if (!defined('LG_SPEEDTEST_LABEL_OUTGOING')) die('LG_SPEEDTEST_LABEL_OUTGOING not found in config.php');
-        if (!defined('LG_SPEEDTEST_CMD_OUTGOING')) die('LG_SPEEDTEST_CMD_OUTGOING not found in config.php');
-        if (!defined('LG_SPEEDTEST_FILES')) die('LG_SPEEDTEST_FILES not found in config.php');
         if (!defined('LG_TERMS')) die('LG_TERMS not found in config.php');
     }
 
@@ -60,7 +51,7 @@ class LookingGlass
      */
     public static function startSession(): void
     {
-        session_name('HYLOOKINGLASS');
+        session_name('LGSESSION');
         @session_start() or die('Could not start session!');
     }
 
@@ -142,9 +133,9 @@ class LookingGlass
      * @param int $count Number of requests.
      * @return bool True on success.
      */
-    public static function ping(string $host, int $count = 4): bool
+    public static function ping(string $host, string $link, int $count = 4): bool
     {
-        return self::procExecute('ping -c' . $count . ' -w15', $host);
+        return self::procExecute('ping -I ' . self::getLinkIp($link) . ' -c' . $count . ' -w15', $host);
     }
 
     /**
@@ -154,7 +145,7 @@ class LookingGlass
      * @param int $count Number of requests.
      * @return bool True on success.
      */
-    public static function ping6(string $host, int $count = 4): bool
+    public static function ping6(string $host, string $link, int $count = 4): bool
     {
         return self::procExecute('ping -6 -c' . $count . ' -w15', $host);
     }
@@ -165,9 +156,9 @@ class LookingGlass
      * @param string $host The target host.
      * @return bool True on success.
      */
-    public static function mtr(string $host): bool
+    public static function mtr(string $host, string $link): bool
     {
-        return self::procExecute('mtr -4 --report --report-wide', $host);
+        return self::procExecute('mtr -4 -a ' . self::getLinkIp($link) . ' --report --report-wide', $host);
     }
 
     /**
@@ -176,7 +167,7 @@ class LookingGlass
      * @param string $host The target host.
      * @return bool True on success.
      */
-    public static function mtr6(string $host): bool
+    public static function mtr6(string $host, string $link): bool
     {
         return self::procExecute('mtr -6 --report --report-wide', $host);
     }
@@ -188,9 +179,9 @@ class LookingGlass
      * @param int $failCount Number of failed hops.
      * @return bool True on success.
      */
-    public static function traceroute(string $host, int $failCount = 4): bool
+    public static function traceroute(string $host, string $link, int $failCount = 4): bool
     {
-        return self::procExecute('traceroute -4 -w2', $host, $failCount);
+        return self::procExecute('traceroute -s ' . self::getLinkIp($link) . ' -4 -w2', $host, $failCount);
     }
 
     /**
@@ -200,7 +191,7 @@ class LookingGlass
      * @param int $failCount Number of failed hops.
      * @return bool True on success.
      */
-    public static function traceroute6(string $host, int $failCount = 4): bool
+    public static function traceroute6(string $host, string $link, int $failCount = 4): bool
     {
         return self::procExecute('traceroute -6 -w2', $host, $failCount);
     }
